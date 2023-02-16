@@ -10,7 +10,7 @@ const options: DataSourceOptions = {
   password: env.DATABASE_PASS,
   database: env.DATABASE_NAME,
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [User],
 };
 
