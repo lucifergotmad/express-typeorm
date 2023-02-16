@@ -11,6 +11,6 @@ export class User {
   @Column({ type: "varchar" })
   password: string;
 
-  @Column({ type: "string", enum: ["ADMIN", "USER"] })
+  @Column({ type: "enum", enum: ["ADMIN", "USER"] })
   level: string;
 }

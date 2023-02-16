@@ -15,3 +15,18 @@ const options: DataSourceOptions = {
 };
 
 export const AppDataSource = new DataSource(options);
+
+export const connectDatabase = () => {
+  AppDataSource.initialize()
+    .then(() => {
+      console.log("Successfull connect to the database!");
+    })
+    .catch((error) => {
+      console.error(
+        "Failed connect to the database!",
+        error.message,
+        error.trace
+      );
+      process.exit(1);
+    });
+};
