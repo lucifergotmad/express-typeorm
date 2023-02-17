@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions } from "typeorm";
 import { User } from "../models/user.model";
-import { env } from "./env.const";
+import { env } from "./env-schema";
 
 const options: DataSourceOptions = {
   type: "postgres",

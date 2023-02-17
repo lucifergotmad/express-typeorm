@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import status from "http-status";
 
-import { env } from "../config/env.const";
+import { env } from "../config/env-schema";
 
 const errorHandler = (error: Error, req: Request, res: Response) => {
   const statusCode = res.statusCode ?? status.INTERNAL_SERVER_ERROR;
