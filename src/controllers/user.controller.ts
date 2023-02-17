@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import httpStatus from "http-status";
+import { AppDataSource } from "../config/data-source";
 import { UserLevel } from "../constants/user-level.const";
 import { hashPassword, matchPassword } from "../helpers/bcrypt.helper";
 import { generateToken } from "../helpers/jwt.helpers";
-import { UserRepository } from "../models/user.model";
+import { User } from "../models/user.model";
 import { LoginUserType } from "../validations/login-user.schema";
 import { RegisterUserType } from "../validations/register-user.schema";
 
@@ -15,7 +16,7 @@ import { RegisterUserType } from "../validations/register-user.schema";
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { user_id, password }: RegisterUserType = req.body;
 
-  const userExists = await UserRepository.findOne({
+  const userExists = await AppDataSource.getRepository(User).findOne({
     where: {
       user_id,
     },
@@ -26,18 +27,20 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("User id already exists");
   }
 
-  const user = UserRepository.create({
+  const userEntity = AppDataSource.getRepository(User).create({
     user_id,
     password: await hashPassword(password, 10),
     level: UserLevel.User,
   });
 
-  if (user) {
+  await AppDataSource.getRepository(User).save(userEntity);
+
+  if (userEntity) {
     res.status(httpStatus.CREATED).json({
       message: "Berhasil Register!",
       data: {
-        user_id: user.user_id,
-        level: user.level,
+        user_id: userEntity.user_id,
+        level: userEntity.level,
       },
     });
   } else {
@@ -53,7 +56,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { user_id, password }: LoginUserType = req.body;
 
-  const user = await UserRepository.findOne({
+  const user = await AppDataSource.getRepository(User).findOne({
     where: {
       user_id,
     },

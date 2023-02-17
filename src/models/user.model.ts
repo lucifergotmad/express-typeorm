@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { AppDataSource } from "../config/data-source";
 
 @Entity({ name: "users" })
 export class User {
@@ -15,5 +14,3 @@ export class User {
   @Column({ type: "enum", enum: ["ADMIN", "USER"] })
   level: string;
 }
-
-export const UserRepository = AppDataSource.getRepository(User);
